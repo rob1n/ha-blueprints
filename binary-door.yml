@@ -36,9 +36,7 @@ action:
       entity_id: !input motion_sensor
       from: "on"
       to: "off"
-
-  - choose:
-    - alias: 'Motion wait not defined and target off entity not defined'    
-      sequence:
-        - service: homeassistant.turn_off
-          entity_id: !input target_entity
+  - alias: 'Motion wait not defined and target off entity not defined'    
+    sequence:
+      - service: homeassistant.turn_off
+        entity_id: !input target_entity
