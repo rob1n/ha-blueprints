@@ -1,0 +1,42 @@
+blueprint:
+  name: Turn on light based on binary sensor.
+  description: >
+    Turn on light based on binary sensor.
+
+
+
+  domain: automation
+  input:
+    motion_sensor:
+      name: Binary Sensor
+      description: This sensor will trigger the turning on of the target entity.
+      selector:
+        entity:
+    target_entity:
+      name: Target entity.
+      description: The light, switch, scene to turn on (or script to run) when the automation is triggered.
+      selector:
+        entity:
+
+
+mode: restart
+max_exceeded: silent
+
+variables:
+  target_entity: !input target_entity
+
+trigger:
+  platform: state
+  entity_id: !input motion_sensor
+  to: 'on'
+
+action:
+  - service: homeassistant.turn_on
+    entity_id: !input target_entity
+  - wait_for_trigger:
+      platform: state
+      entity_id: !input motion_sensor
+      from: "on"
+      to: "off"
+  - service: homeassistant.turn_off
+      entity_id: !input target_entity
